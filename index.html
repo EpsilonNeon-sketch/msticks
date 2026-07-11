@@ -23,7 +23,29 @@
         .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
         .btn-outline{padding:.75rem 1.5rem;border-radius:.6rem;background:#fff;color:#2563eb;font-size:.9rem;font-weight:600;border:1.5px solid #bfdbfe;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif}
         .btn-outline:hover{border-color:#2563eb;background:#eff6ff}
-
+/* ===== EPSILON PANEL AD MODAL ===== */
+.ad-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;animation:adFadeIn .3s ease}
+.ad-overlay.visible{display:flex}
+@keyframes adFadeIn{from{opacity:0}to{opacity:1}}
+.ad-card{background:#fff;border-radius:1.25rem;max-width:440px;width:100%;overflow:hidden;box-shadow:0 32px 80px rgba(15,23,42,.2);animation:adSlideUp .4s cubic-bezier(.22,1,.36,1);position:relative}
+@keyframes adSlideUp{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ad-card-top{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#0ea5e9 100%);padding:2rem 1.75rem 1.75rem;text-align:center;position:relative;overflow:hidden}
+.ad-card-top::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(14,165,233,.2) 0%,transparent 50%),radial-gradient(circle at 20% 80%,rgba(30,64,175,.15) 0%,transparent 50%)}
+.ad-card-top .ad-logo{width:56px;height:56px;border-radius:.85rem;background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);margin:0 auto .85rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.03em;position:relative}
+.ad-card-top h3{font-size:1.35rem;font-weight:800;color:#fff;margin-bottom:.35rem;position:relative}
+.ad-card-top p{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.55;position:relative}
+.ad-card-body{padding:1.5rem 1.75rem 1.75rem}
+.ad-features{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.5rem}
+.ad-feature{display:flex;align-items:center;gap:.65rem;font-size:.84rem;color:#334155}
+.ad-feature-icon{width:28px;height:28px;border-radius:.5rem;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ad-feature-icon svg{width:14px;height:14px;color:#1e40af}
+.ad-close{position:absolute;top:.85rem;right:.85rem;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;font-size:1.1rem;line-height:1}
+.ad-close:hover{background:rgba(255,255,255,.18);color:#fff}
+.ad-btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;border-radius:.65rem;background:linear-gradient(135deg,#1e40af,#0ea5e9);color:#fff;font-size:.92rem;font-weight:700;border:none;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif;text-decoration:none;box-shadow:0 4px 16px rgba(30,64,175,.3)}
+.ad-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(30,64,175,.4)}
+.ad-btn-dismiss{display:block;width:100%;margin-top:.65rem;padding:.65rem;border-radius:.65rem;background:transparent;color:#94a3b8;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.ad-btn-dismiss:hover{color:#64748b;background:#f8fafc}
+@media(max-width:480px){.ad-card-top{padding:1.5rem 1.25rem 1.25rem}.ad-card-body{padding:1.25rem}.ad-card-top h3{font-size:1.15rem}}
         #authPage{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0f6ff 0%,#e0effe 50%,#f0f9ff 100%)}
         .auth-card{background:#fff;border-radius:1.25rem;box-shadow:0 24px 64px rgba(37,99,235,.08);max-width:460px;width:100%;margin:1rem;overflow:hidden}
         .auth-tabs{display:flex;border-bottom:2px solid #dbeafe}
@@ -435,6 +457,62 @@
             lucide.createIcons();
         }
         init();
+       
+(function(){
+    document.addEventListener('DOMContentLoaded',function(){
+        var ad=document.getElementById('epsilonAd');
+        if(!ad)return;
+        function show(){ad.classList.add('visible')}
+        function close(){ad.classList.remove('visible')}
+        window.closeEpsilonAd=close;
+        ad.addEventListener('click',function(e){if(e.target===ad)close()});
+        document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+        var orig=window.loadProfile;
+        if(typeof orig==='function'){
+            window.loadProfile=async function(){
+                var result=orig.apply(this,arguments);
+                setTimeout(show,800);
+                return result;
+            };
+        }
+    });
+})();
     </script>
+   <!-- EPSILON PANEL AD MODAL -->
+<div class="ad-overlay" id="epsilonAd">
+    <div class="ad-card">
+        <div class="ad-card-top">
+            <button class="ad-close" onclick="closeEpsilonAd()" aria-label="Close">&times;</button>
+            <div class="ad-logo">ε</div>
+            <h3>Need a Website Like This?</h3>
+            <p>Order your own from Epsilon Panel — fast, customizable, and delivered within a month or less.</p>
+        </div>
+        <div class="ad-card-body">
+            <div class="ad-features">
+                <div class="ad-feature">
+                    <div class="ad-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5H18l-3.75 2.7 1.5 4.5L12 12l-3.75 2.7 1.5-4.5L6 7.5h4.5z"/></svg></div>
+                    Fully customizable to your brand
+                </div>
+                <div class="ad-feature">
+                    <div class="ad-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                    Delivered in a month or less
+                </div>
+                <div class="ad-feature">
+                    <div class="ad-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    Affordable pricing for any business
+                </div>
+                <div class="ad-feature">
+                    <div class="ad-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                    Auth, database & hosting included
+                </div>
+            </div>
+            <a href="https://epsilon-panel.vercel.app" target="_blank" rel="noopener noreferrer" class="ad-btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Order Your Website Now
+            </a>
+            <button class="ad-btn-dismiss" onclick="closeEpsilonAd()">Maybe later</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
